@@ -130,12 +130,18 @@ identifierP = do
   return $ T.pack ident
 
 valP :: Parser Expr
-valP = charP <|> numP <|> boolP
+valP = charP <|> numP <|> boolP <|> stringP
   where
     charP = do -- TODO
-      _ <- string "'"
+      _ <- char '\''
       c <- alphaNumChar
-      _ <- string "'"
+      _ <- char '\''
       return $ Character c
     numP = (Num . read) <$> some digitChar
     boolP = (Bool True <$ string "true") <|> (Bool False <$ string "false")
+    -- TODO
+    stringP = do
+      _ <- char '"'
+      str <- many (alphaNumChar <|> spaceChar <|> char ':')
+      _ <- char '"'
+      return $ EString $ T.pack str

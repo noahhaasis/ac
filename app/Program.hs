@@ -44,8 +44,8 @@ data Expr
   = Num Int
   | Bool Bool
   | Character Char
+  | EString Text
   | BinaryOp BinaryOperator Expr Expr
-  | Eq Expr Expr
   | Var Text
   | Index
     { operand :: Expr

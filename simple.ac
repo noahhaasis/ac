@@ -1,0 +1,10 @@
+fun sum_from_to(a: int, b: int): int {
+  if (a == b) {
+    return a;
+  }
+  return a + sum_from_to(a + 1, b);
+}
+
+fun main(): unit {
+  sum_from_to(1, 3);
+}

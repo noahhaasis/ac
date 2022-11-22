@@ -66,6 +66,9 @@ main = do
     it "parses indexing operation" $ do
       parseMaybe exprP "array[1]" `shouldBe` Just (Index (Var "array") (Num 1))
 
+    it "parses a string literal" $ do
+      parseMaybe exprP "\"test string expression\"" `shouldBe` Just (EString "test string expression")
+
     it "parses a parenthesized expression" $ do
       parseMaybe exprP "(1 + 2)" `shouldBe` Just (BinaryOp Add (Num 1) (Num 2))
 
@@ -77,6 +80,9 @@ main = do
 
     it "parses a complex expression" $ do
       parseMaybe exprP "print(fib(string_to_int(read_line())))" `shouldBe` Just (FunctionCall "print" [FunctionCall "fib" [FunctionCall "string_to_int" [FunctionCall "read_line" []]]])
+
+    xit "respects operator precedence" $ do
+      parseMaybe exprP "n == 0 || n == 1" `shouldBe` Just (BinaryOp Or (BinaryOp Equals (Var "n") (Num 0)) (BinaryOp Equals (Var "n") (Num 1)))
 
   describe "Parser.statementP" $ do
     it "parses a return statement" $ do
@@ -114,4 +120,6 @@ main = do
   describe "Parser.parse" $ do
     it "parses a fibonacci program" $ do
       parse fibProgram `shouldSatisfy` isRight
+
+  -- TODO: Test the interpreter
 

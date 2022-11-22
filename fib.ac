@@ -26,12 +26,13 @@ fun string_to_int(s: string): int {
 }
 
 fun fib(n: int): int {
-	if (n == 0 || n == 1) {
+	if ((n == 0) || (n == 1)) {
 		return 1;
 	}
-	return fib(n-1) * fib(n-2);
+	return fib(n-1) + fib(n-2);
 }
 
 fun main(): unit {
+  print("please enter a number: ");
   print(fib(string_to_int(read_line())));
 }
