@@ -80,58 +80,11 @@ typecheckBlock returnType stmts = do
 typecheckExpr ::
   (MonadReader GlobalEnv m, MonadState Environment m, MonadError TypeError m) =>
   Expr -> Type -> m Success
-typecheckExpr (Num _) Int = return Success
-typecheckExpr (Bool _) Boolean = return Success
-typecheckExpr (Character _) Char = return Success
-typecheckExpr (EString _) String = return Success
-typecheckExpr (BinaryOp Add l r) Int = typecheckExpr l Int >> typecheckExpr r Int
-typecheckExpr (BinaryOp Sub l r) Int = typecheckExpr l Int >> typecheckExpr r Int
-typecheckExpr (BinaryOp Mult l r) Int = typecheckExpr l Int >> typecheckExpr r Int
-typecheckExpr (BinaryOp Lt l r) Boolean = typecheckExpr l Int >> typecheckExpr r Int
-typecheckExpr e@(BinaryOp Equals l r) Boolean = do
-  t1 <- inferExpr l
-  t2 <- inferExpr r
-  if t1 /= t2
-    then throwError $ ExpectedButGot e t1 t2
-    else return Success
-typecheckExpr (BinaryOp Or l r) Boolean = typecheckExpr l Boolean >> typecheckExpr r Boolean
-typecheckExpr e@(Var v) t = do
-  (Environment env) <- get
-  case M.lookup v env of
-    Just t' | t == t' -> return $ Success
-    Just t' -> throwError $ ExpectedButGot e t t'
-    Nothing -> throwError $ UndefinedVariable v
-typecheckExpr (Index a i) Char = typecheckExpr a String >> typecheckExpr i Int
-typecheckExpr (FunctionCall "length" args) t = do
-  case args of
-    [str] -> do
-      typecheckExpr str String
-      return Success
-    [] -> throwError $ TooFewArgs "length"
-    _ -> throwError $ TooManyArgs "length"
-typecheckExpr (FunctionCall "print" args) t = do
-  case args of
-    [arg] -> do
-      -- Print can print values of any type
-      _ <- inferExpr arg
-      return Success
-    [] -> throwError $ TooFewArgs "print"
-    _ -> throwError $ TooManyArgs "print"
-typecheckExpr (FunctionCall "read_line" args) t = do
-  case args of
-    [] -> return Success
-    _ -> throwError $ TooManyArgs "read_line"
-typecheckExpr e@(FunctionCall name args) t = do
-  (GlobalEnv globalEnv) <- ask
-  case M.lookup name globalEnv of
-    Just (f@Function {..}) -> do
-      if returnType /= t
-        then throwError $ ExpectedButGot e t returnType
-        else checkArgs f args
-    Nothing -> throwError $ UndefinedFunction name
 typecheckExpr expr expectedType = do
   actualType <- inferExpr expr
-  throwError $ ExpectedButGot expr expectedType actualType
+  if actualType == expectedType
+      then return Success
+      else throwError $ ExpectedButGot expr expectedType actualType
 
 inferExpr ::
   (MonadReader GlobalEnv m, MonadState Environment m, MonadError TypeError m) =>
