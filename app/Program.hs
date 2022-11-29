@@ -1,15 +1,26 @@
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE RecordWildCards #-}
 module Program where
 
 import Data.Text (Text)
+import Data.Map (Map)
+import qualified Data.Map as M
 
 newtype Program = Program [Function]
   deriving (Eq, Show)
 
-data Type = Unit | Int | String | Char deriving (Eq, Show)
+data Type = Unit | Int | String | Boolean | Char deriving (Eq, Show)
 
 type Block = [Statement]
+
+data GlobalEnv = GlobalEnv
+  { functions :: Map Text Function
+  }
+
+buildGlobalEnv :: Program -> GlobalEnv
+buildGlobalEnv (Program functions) =
+  GlobalEnv (foldr (\f@Function {..} fs -> M.insert name f fs) M.empty functions)
 
 data Function
   = Function

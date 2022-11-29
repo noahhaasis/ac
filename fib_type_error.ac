@@ -1,13 +1,3 @@
-# The AC Compiler
-
-Compiling: `stack build`  
-Running: `stack exec ac <program>`  
-Tests: `stack test`  
-
-WIP: For now it's only a bare bones interpreter.
-
-## Example Program
-```kotlin
 fun character_to_int(c: char): int {
 	if (c == '0') { return 0; }
 	if (c == '1') { return 1; }
@@ -22,7 +12,7 @@ fun character_to_int(c: char): int {
 	return 0;
 }
 
-fun string_to_int(s: string): int {
+fun string_to_int(s: int): int {
 	var result: int = 0;
 	var i: int = 0;
 	while (i < length(s)) {
@@ -46,6 +36,3 @@ fun main(): unit {
   print("please enter a number: ");
   print(fib(string_to_int(read_line())));
 }
-```
-
-![running the fibonacci program](/img/fib.png)

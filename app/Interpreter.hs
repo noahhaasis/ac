@@ -23,10 +23,6 @@ data Value
   | VUnit
   deriving Show
 
-data GlobalEnv = GlobalEnv
-  { functions :: Map Text Function
-  }
-
 data Environment = Environment (Map Text Value)
 
 emptyEnvironment :: Environment
