@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 module TypecheckerSpec where
 
 import Control.Monad.Reader (runReaderT)

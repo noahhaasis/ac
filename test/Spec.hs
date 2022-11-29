@@ -1,5 +1,4 @@
 -- {-# OPTIONS_GHC -F -pgmF hspec-discover #-}
-{-# LANGUAGE OverloadedStrings #-}
 module Main where
 import Test.Hspec
 

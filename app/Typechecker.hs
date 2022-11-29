@@ -1,7 +1,6 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE OverloadedStrings #-}
 module Typechecker where
 
 import Control.Monad.Except (MonadError, ExceptT, throwError, catchError, runExceptT, guard)
